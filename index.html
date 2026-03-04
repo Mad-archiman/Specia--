@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="description" content="SPECIA 명함 - WebAR으로 3D 명함을 체험해보세요">
+  <title>SPECIA 명함 | WebAR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google model-viewer -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- 3D 모델 뷰어 -->
+    <model-viewer
+      id="model-viewer"
+      src="/models/specia%20%EB%AA%85%ED%95%A8.glb"
+      alt="SPECIA 비즈니스 카드 3D 모델"
+      camera-controls
+      touch-action="pan-y"
+      auto-rotate
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-scale="fixed"
+      shadow-intensity="1"
+      exposure="1"
+      environment-image="neutral"
+      min-camera-orbit="auto auto 0.1m"
+      max-camera-orbit="auto auto 10m"
+      min-field-of-view="15deg"
+      max-field-of-view="85deg"
+      interaction-prompt="auto"
+      style="--poster-color: transparent;"
+    >
+    </model-viewer>
+
+    <!-- 모델 길게 누를 때 로딩 스피너 -->
+    <div id="long-press-spinner" class="long-press-spinner" aria-hidden="true">
+      <div class="long-press-spinner-inner">
+        <div class="long-press-spinner-circle"></div>
+        <span id="long-press-countdown" class="long-press-spinner-countdown" aria-live="polite">3</span>
+      </div>
+      <p class="long-press-spinner-text">잠시만 기다려주세요...</p>
+    </div>
+
+    <!-- AR 활성화 중에도 보이는 UI 오버레이 -->
+    <div class="ui-overlay" id="ui-overlay">
+      <header class="header">
+        <h1 class="logo"><a href="#" class="logo-refresh" onclick="location.reload(); return false;">SP<span class="logo-e">E</span>CIA</a></h1>
+        <p class="tagline">고객의 프로젝트 완성을 위해 최선을 다하겠습니다!</p>
+      </header>
+
+      <div class="bottom-group">
+        <p class="model-ar-hint">3초 이상 모델을 꾹 누르면 AR 모드로 진입합니다</p>
+        <nav class="quick-actions">
+          <a href="#" id="btn-homepage" class="action-btn" target="_blank" rel="noopener noreferrer">
+            <img src="/specia-logo.png" alt="SPECIA" class="action-icon action-icon-img">
+            <span>홈페이지</span>
+          </a>
+          <a href="#" id="btn-video" class="action-btn" target="_blank" rel="noopener noreferrer">
+            <svg class="action-icon action-icon-youtube" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            <span>소개영상</span>
+          </a>
+          <a href="https://specia-ar-service.vercel.app/" class="action-btn" id="btn-webxr-ar" target="_blank" rel="noopener noreferrer">
+            <svg class="action-icon action-icon-hologram" viewBox="0 0 24 24" aria-hidden="true">
+              <!-- 홀로그램/3D 큐브 (아이소메트릭) -->
+              <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7v10l10 5 10-5V7L12 2z"/>
+              <path fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.8" d="M12 2v20M2 7l10 5 10-5M2 17l10 5 10-5"/>
+            </svg>
+            <span>AR시작</span>
+          </a>
+        </nav>
+        <footer class="footer">
+          <p>핀치로 확대·축소 · 드래그로 회전</p>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

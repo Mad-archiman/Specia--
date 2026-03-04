@@ -1,0 +1,403 @@
+/* ========================================
+   SPECIA WebAR 명함 - 모바일 퍼스트 스타일
+   ======================================== */
+
+:root {
+  --bg-dark: #0a0a0f;
+  --bg-card: rgba(18, 18, 28, 0.92);
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(148, 163, 184, 0.2);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Orbitron', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 모델 뷰어 전체 화면 */
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+}
+
+model-viewer {
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  background: linear-gradient(160deg, #0f0f18 0%, #1a1a2e 50%, #0a0a0f 100%);
+}
+
+/* AR 버튼 숨김 (Tap-to-Place AR은 퀵 액션 버튼으로 이동) */
+model-viewer::part(default-ar-button) {
+  display: none;
+}
+
+/* 모델 길게 누를 때 로딩 스피너 */
+.long-press-spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 15, 0.85);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 20;
+  pointer-events: none;
+}
+.long-press-spinner.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+.long-press-spinner-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.long-press-spinner-circle {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: long-press-spin 0.8s linear infinite;
+}
+.long-press-spinner-countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+  pointer-events: none;
+}
+.long-press-spinner-text {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+@keyframes long-press-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 핫스팟 스타일 */
+.hotspot {
+  display: block;
+  width: auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hotspot:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.hotspot:not([data-visible]) {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.hotspot-annotation {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* model-viewer 핫스팟 기본 스타일 오버라이드 */
+model-viewer .Hotspot {
+  background: var(--bg-card);
+  border-radius: 12px;
+}
+
+/* UI 오버레이 - AR 중에도 유지 */
+.ui-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  z-index: 10;
+}
+
+.ui-overlay * {
+  pointer-events: auto;
+}
+
+/* 하단 그룹: 푸터 문구 + 버튼들을 화면 최하단에 배치 */
+.bottom-group {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* 모델 하단 AR 진입 안내 문구 (버튼들 바로 위) */
+.model-ar-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0 20px 8px;
+  margin: 0 0 4px 0;
+}
+
+/* 헤더 */
+.header {
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-e {
+  -webkit-text-fill-color: #9999CC;
+  color: #9999CC;
+  background: none;
+  background-clip: unset;
+}
+
+.logo-refresh {
+  color: inherit;
+  text-decoration: none;
+  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-refresh:hover {
+  opacity: 0.9;
+}
+
+.tagline {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* AR 힌트 */
+.ar-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin: 0 auto;
+  max-width: 90%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+}
+
+.ar-icon {
+  font-size: 1.25rem;
+}
+
+.ar-hint p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* 퀵 액션 버튼 */
+.quick-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 20px 16px;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  min-width: 100px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  backdrop-filter: blur(12px);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.action-btn:hover,
+.action-btn:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 24px rgba(99, 102, 241, 0.25);
+  transform: translateY(-2px);
+}
+
+/* 아이콘 영역 높이 통일 → 텍스트(홈페이지/소개영상/AR시작) 같은 높이 */
+.action-btn > *:first-child {
+  min-height: 28px;
+  box-sizing: border-box;
+}
+
+.action-btn > *:first-child:not(img) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon {
+  font-size: 1.25rem;
+}
+
+.action-icon-img {
+  width: auto;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
+.action-icon-youtube {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.action-icon-hologram {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+/* 푸터 */
+.footer {
+  padding: 8px 20px 4px;
+  text-align: center;
+}
+
+.footer p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.webxr-link {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.webxr-link:hover {
+  text-decoration: underline;
+}
+
+/* AR 모드에서 UI 강조 */
+model-viewer[ar-status="session-started"] ~ .ui-overlay .ar-hint {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--accent);
+}
+
+model-viewer[ar-status="session-started"] ~ .ui-overlay .ar-hint p {
+  color: var(--text-primary);
+}
+
+/* 반응형 - 태블릿 이상 */
+@media (min-width: 768px) {
+  .logo {
+    font-size: 1.75rem;
+  }
+
+  .tagline {
+    font-size: 0.85rem;
+  }
+
+  .quick-actions {
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .action-btn {
+    padding: 18px 28px;
+    min-width: 120px;
+    font-size: 0.9rem;
+  }
+
+  .action-icon {
+    font-size: 1.5rem;
+  }
+
+  .action-btn > *:first-child {
+    min-height: 34px;
+  }
+
+  .action-icon-img {
+    height: 34px;
+  }
+
+  .action-icon-youtube {
+    width: 34px;
+    height: 34px;
+  }
+
+  .action-icon-hologram {
+    width: 34px;
+    height: 34px;
+  }
+
+  .ar-hint {
+    padding: 12px 24px;
+  }
+
+  .ar-hint p {
+    font-size: 0.9rem;
+  }
+}
+
+/* 다크 모드 유지 (시스템 설정 무관) */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-dark: #0a0a0f;
+    --bg-card: rgba(18, 18, 28, 0.92);
+    --text-primary: #f8fafc;
+  }
+}

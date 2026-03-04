@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="SPECIA 명함 - WebXR AR으로 3D 명함을 배치하세요">
+  <title>SPECIA 명함 | WebXR AR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="webxr-ar.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 캔버스 컨테이너 -->
+    <div id="canvas-container"></div>
+
+    <!-- 스플래시: 모바일에서 탭 시 AR 시작 -->
+    <div id="splash" class="splash">
+      <div class="splash-content">
+        <h1><a href="index.html" class="splash-logo-link">SP<span class="splash-logo-e">E</span>CIA</a></h1>
+        <p class="tagline">고객의 프로젝트 완성을 위해 최선을 다하겠습니다.</p>
+        <button id="btn-start-ar" class="btn-ar">AR 시작</button>
+        <p class="splash-hint">- 바닥이나 평평한 면을 비춰주세요 :p -</p>
+      </div>
+    </div>
+
+    <!-- DOM 오버레이: AR 세션 중 보이는 버튼들 -->
+    <div id="ar-overlay" class="ar-overlay" style="display: none;">
+      <button id="btn-close-ar" class="btn-close-ar" aria-label="AR 종료">×</button>
+      <div class="ar-bottom-bar">
+        <button id="btn-play-pause" class="btn-play-pause" aria-label="재생/일시정지" type="button">
+          <span class="btn-play-pause-icon" aria-hidden="true">⏸</span>
+          <span class="btn-play-pause-text">일시정지</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 모듈 로드 실패 시에도 버튼 반응하도록 인라인 스크립트 -->
+  <script>
+    (function() {
+      var btn = document.getElementById('btn-start-ar');
+      if (!btn) return;
+      function onArClick(e) {
+        e.preventDefault();
+        if (typeof window.startARSession === 'function') {
+          window.startARSession();
+        } else {
+          alert('AR 스크립트를 불러오지 못했습니다.\n\n• HTTPS로 접속했는지 확인해주세요.\n• 새로고침 후 다시 시도해주세요.\n• 개발자 도구(F12) 콘솔에서 오류를 확인해주세요.');
+        }
+      }
+      btn.addEventListener('click', onArClick);
+    })();
+  </script>
+  <script type="module" src="webxr-ar.js"></script>
+</body>
+</html>
